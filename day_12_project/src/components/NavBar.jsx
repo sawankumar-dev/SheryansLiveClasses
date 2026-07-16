@@ -1,4 +1,8 @@
-const NavBar = ({ setIsCartOpen }) => {
+import { useContext } from "react";
+import { MyStore } from "../context/MyContext";
+
+const NavBar = () => {
+    const {setIsCartOpen} = useContext(MyStore)
   return (
     <div className="flex justify-between bg-gray-800 px-4 py-4 rounded">
         <div className="brand">

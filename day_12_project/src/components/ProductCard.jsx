@@ -1,8 +1,15 @@
-// props में 'product' ऑब्जेक्ट आएगा
-const ProductCard = ({ product, setCartItem, cartItem }) => {
-  // डेटा को डिस्ट्रक्चर (Destructure) कर लेते हैं
-  const { title, price, description, category, image, rating } = product;
+import { useContext } from "react";
+import { MyStore } from "../context/MyContext";
 
+// props में 'product' ऑब्जेक्ट आएगा
+const ProductCard = ({ product, isInCart}) => {
+  // डेटा को डिस्ट्रक्चर (Destructure) कर लेते हैं
+  const { title, price, description, category, image, rating, id } = product;
+  const {setCartItems, incrementQuantity, decrementQuantity} = useContext(MyStore)
+  const addToCart = () => {
+    setCartItems((prev) => [...prev, {...product, quantity: 1}])
+    alert(`Cart added successfully!\nTitle: ${title}`)
+  }
   return (
     <div className="max-w-sm rounded-2xl border border-gray-200 bg-gray-300 p-5 shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col justify-between">
       <div>
@@ -40,9 +47,21 @@ const ProductCard = ({ product, setCartItem, cartItem }) => {
         <span className="text-xl font-bold text-gray-900">
           ${price.toFixed(2)}
         </span>
-        <button
-            className="border px-2 rounded bg-gray-400 border-gray-500" 
-            onClick={() => {setCartItem([...cartItem, product])}}>Add to Cart</button>
+        {isInCart? (
+                  <span className="flex  gap-2">
+                        <button
+                        onClick={() => decrementQuantity(id)}
+                        className="text-2xl cursor-pointer hover:text-gray-700">-</button>
+                        <p className="text-2xl">{isInCart.quantity}</p>
+                        <button
+                        onClick={() => incrementQuantity(id)}
+                        className="text-2xl cursor-pointer hover:text-gray-700">+</button>
+                  </span>
+         
+                  ):
+                   (<button
+                  className="border px-2 rounded bg-gray-400 border-gray-500 cursor-pointer" 
+                  onClick={() => addToCart()}>Add to Cart</button>)}
         {/* रेटिंग */}
         {rating && (
           <div className="flex items-center space-x-1 bg-amber-50 px-2 py-1 rounded-lg">
